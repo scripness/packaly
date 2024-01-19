@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { IsZipCode } from '../validators/zipcode.validator';
+import { IsZipCode } from '../validators/is-zip-code.validator';
 
 export class OrderAddressDto {
   @IsString()

@@ -2,11 +2,19 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { HydratedDocument } from 'mongoose';
 
-import { OrderAddressDto } from '../dto/order-address.dto';
-import { OrderPackageDto } from '../dto/order-package.dto';
-import { OrderStatus } from '../interfaces/order-status.interface';
+import { OrderAddressDto } from './dto/order-address.dto';
+import { OrderPackageDto } from './dto/order-package.dto';
 
 export type OrderDocument = HydratedDocument<Order>;
+
+export enum OrderStatus {
+  CREATED = 'CREATED',
+  PICKED_UP = 'PICKED_UP',
+  CANCELLED = 'CANCELLED',
+  DELIVERED = 'DELIVERED',
+  RETURNING = 'RETURNING',
+  RETURNED = 'RETURNED',
+}
 
 @Schema()
 export class Order {

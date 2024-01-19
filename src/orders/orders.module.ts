@@ -3,7 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-import { Order, OrderSchema } from './schemas/order.schema';
+import { Order, OrderSchema } from './order.schema';
+
+import { IsValidOrderStatusConstraint } from './validators/is-valid-order-status.validator';
 
 @Module({
   imports: [
@@ -15,6 +17,6 @@ import { Order, OrderSchema } from './schemas/order.schema';
     ]),
   ],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [OrdersService, IsValidOrderStatusConstraint],
 })
 export class OrdersModule {}

@@ -3,9 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Model, Types } from 'mongoose';
 
-import { Order } from './schemas/order.schema';
+import { Order, OrderStatus } from './order.schema';
+
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderStatus } from './interfaces/order-status.interface';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+
 import { calculatePrice } from './utils/calculatePrice';
 
 @Injectable()
@@ -28,6 +30,26 @@ export class OrdersService {
       id: savedOrder._id,
       status: savedOrder.status,
       price: savedOrder.price,
+    };
+  }
+
+  async updateStatus({ id, status }: UpdateOrderStatusDto): Promise<{
+    id: Types.ObjectId;
+    oldStatus: OrderStatus;
+    newStatus: OrderStatus;
+  }> {
+    const order = await this.orderModel.findById(id);
+
+    const oldStatus = order.status;
+
+    order.status = status;
+
+    const updatedOrder = await order.save();
+
+    return {
+      id: updatedOrder._id,
+      oldStatus,
+      newStatus: status,
     };
   }
 }

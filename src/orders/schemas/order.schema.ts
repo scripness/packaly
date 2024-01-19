@@ -4,25 +4,26 @@ import { HydratedDocument } from 'mongoose';
 
 import { OrderAddressDto } from '../dto/order-address.dto';
 import { OrderPackageDto } from '../dto/order-package.dto';
+import { OrderStatus } from '../interfaces/order-status.interface';
 
 export type OrderDocument = HydratedDocument<Order>;
 
 @Schema()
 export class Order {
-  @Prop({
-    required: true,
-  })
+  @Prop()
   dropoff: OrderAddressDto;
 
-  @Prop({
-    required: true,
-  })
+  @Prop()
   pickup: OrderAddressDto;
 
-  @Prop({
-    required: true,
-  })
+  @Prop()
   packages: OrderPackageDto[];
+
+  @Prop()
+  price: number;
+
+  @Prop()
+  status: OrderStatus;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

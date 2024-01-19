@@ -1,43 +1,35 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
+import { IsZipCode } from '../validators/zipcode.validator';
 
 export class OrderAddressDto {
   @IsString()
   @IsNotEmpty()
-  address: string;
+  readonly address: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  city: string;
+  readonly city: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  country: string;
+  readonly country: string;
 
   @IsOptional()
   @IsEmail()
-  email: string;
+  readonly email: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
-  @IsNumber()
-  @Length(6, 6, {
-    always: true,
-  })
-  zipcode: string;
+  @IsZipCode()
+  readonly zipcode: string;
 
   @IsString()
   @IsNotEmpty()
-  phonenumber: string;
+  readonly phonenumber: string;
 }

@@ -3,17 +3,17 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 export class OrderPackageDto {
   @IsNumber()
   @IsNotEmpty()
-  height: number;
+  readonly height: number;
 
   @IsNumber()
   @IsNotEmpty()
-  length: number;
+  readonly length: number;
 
   @IsNumber()
   @IsNotEmpty()
-  width: number;
+  readonly width: number;
 
   @IsNumber()
   @IsNotEmpty()
-  weight: number;
+  readonly weight: number;
 }

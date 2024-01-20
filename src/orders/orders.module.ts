@@ -5,8 +5,6 @@ import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { Order, OrderSchema } from './order.schema';
 
-import { IsValidOrderStatusConstraint } from './validators/is-valid-order-status.validator';
-
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -17,6 +15,6 @@ import { IsValidOrderStatusConstraint } from './validators/is-valid-order-status
     ]),
   ],
   controllers: [OrdersController],
-  providers: [OrdersService, IsValidOrderStatusConstraint],
+  providers: [OrdersService],
 })
 export class OrdersModule {}

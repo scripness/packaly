@@ -1,6 +1,6 @@
 import { OrderPackageDTO } from '../dto/order-package.dto';
 
-export const calculatePrice = (packages: OrderPackageDTO[]): number => {
+export function calculatePrice(packages: OrderPackageDTO[]): number {
   /**
    * Each package costs €1.
    * If the volume of the package is less than 5000, then no additional charge.
@@ -31,4 +31,4 @@ export const calculatePrice = (packages: OrderPackageDTO[]): number => {
   }
 
   return price;
-};
+}

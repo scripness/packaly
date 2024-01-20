@@ -7,9 +7,9 @@ import { Order, OrderStatus } from './order.schema';
 
 import { CreateOrderDTO } from './dto/create-order.dto';
 import { UpdateOrderStatusDTO } from './dto/update-order-status.dto';
+import { SearchOrdersDTO } from './dto/search-orders.dto';
 
 import { calculatePrice } from './utils/calculatePrice';
-import { SearchOrdersDTO } from './dto/search-orders.dto';
 
 @Injectable()
 export class OrdersService {

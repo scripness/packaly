@@ -1,3 +1,5 @@
+import * as mongoose from 'mongoose';
+
 import {
   registerDecorator,
   ValidationArguments,
@@ -6,8 +8,9 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { Order } from '../order.schema';
-import * as mongoose from 'mongoose';
+import { Order, OrderSchema, OrderStatus } from '../order.schema';
+
+import { validateStatusTransition } from '../utils/validateStatusTransition';
 
 @ValidatorConstraint({
   async: true,
@@ -16,11 +19,20 @@ export class IsValidOrderStatusConstraint
   implements ValidatorConstraintInterface
 {
   async validate(value: any, args: ValidationArguments) {
-    const model = mongoose.connection;
+    await mongoose.connect('mongodb://localhost/nest');
 
-    // const order = await model.findById(args.object['id']);
+    const model = mongoose.model(Order.name, OrderSchema);
 
-    return false;
+    if (!('id' in args.object) || !args.object.id) {
+      return false;
+    }
+
+    const order = await model.findById(args.object.id);
+
+    return (
+      Object.values(OrderStatus).includes(value) &&
+      validateStatusTransition(order.status, value)
+    );
   }
 
   defaultMessage(validationArguments?: ValidationArguments): string {

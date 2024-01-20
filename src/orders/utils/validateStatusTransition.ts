@@ -1,9 +1,9 @@
 import { OrderStatus } from '../order.schema';
 
-export const validateStatusTransition = (
+export function validateStatusTransition(
   oldStatus: OrderStatus,
   newStatus: OrderStatus,
-): boolean => {
+): boolean {
   const transitions = {
     [OrderStatus.CREATED]: [OrderStatus.PICKED_UP, OrderStatus.CANCELLED],
     [OrderStatus.PICKED_UP]: [OrderStatus.DELIVERED, OrderStatus.RETURNING],
@@ -14,4 +14,4 @@ export const validateStatusTransition = (
   };
 
   return transitions[oldStatus].includes(newStatus);
-};
+}

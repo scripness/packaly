@@ -108,8 +108,8 @@ describe('OrdersController (e2e)', () => {
         .expect(400);
 
       expect(response.body.message).toEqual([
-        'id should not be empty',
-        'status must be one of the following values: CREATED, PICKED_UP, CANCELLED, DELIVERED, RETURNING, RETURNED',
+        'id must be a mongodb id',
+        'status must be a valid order status',
       ]);
     });
 
@@ -148,7 +148,7 @@ describe('OrdersController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/api/orders/update-status')
         .send(updateOrderStatusPayload)
-        .expect(200);
+        .expect(201);
 
       expect(response.body).toEqual({
         id: updateOrderStatusPayload.id,

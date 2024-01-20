@@ -71,9 +71,8 @@ describe('OrdersController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/api/orders')
-        .send(invalidPayload);
-
-      expect(response.status).toBe(400);
+        .send(invalidPayload)
+        .expect(400);
 
       expect(response.body.message).toEqual([
         'dropoff.address should not be empty',
@@ -87,9 +86,8 @@ describe('OrdersController (e2e)', () => {
     it('creates an order', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/orders')
-        .send(createOrderPayload);
-
-      expect(response.status).toBe(201);
+        .send(createOrderPayload)
+        .expect(201);
 
       expect(response.body).toEqual({
         id: expect.stringContaining(''),
@@ -106,9 +104,8 @@ describe('OrdersController (e2e)', () => {
         .send({
           id: '',
           status: 'NON_EXISTING',
-        });
-
-      expect(response.status).toBe(400);
+        })
+        .expect(400);
 
       expect(response.body.message).toEqual([
         'id should not be empty',
@@ -119,7 +116,8 @@ describe('OrdersController (e2e)', () => {
     it('fails to update due to invalid status', async () => {
       const createOrderResponse = await request(app.getHttpServer())
         .post('/api/orders')
-        .send(createOrderPayload);
+        .send(createOrderPayload)
+        .expect(201);
 
       const updateOrderStatusPayload = {
         id: createOrderResponse.body.id,
@@ -128,9 +126,8 @@ describe('OrdersController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/api/orders/update-status')
-        .send(updateOrderStatusPayload);
-
-      expect(response.status).toBe(400);
+        .send(updateOrderStatusPayload)
+        .expect(400);
 
       expect(response.body.message).toEqual([
         'status must be a valid order status',
@@ -140,7 +137,8 @@ describe('OrdersController (e2e)', () => {
     it('updates the order status', async () => {
       const createOrderResponse = await request(app.getHttpServer())
         .post('/api/orders')
-        .send(createOrderPayload);
+        .send(createOrderPayload)
+        .expect(201);
 
       const updateOrderStatusPayload = {
         id: createOrderResponse.body.id,
@@ -149,15 +147,66 @@ describe('OrdersController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/api/orders/update-status')
-        .send(updateOrderStatusPayload);
-
-      expect(response.status).toBe(201);
+        .send(updateOrderStatusPayload)
+        .expect(200);
 
       expect(response.body).toEqual({
         id: updateOrderStatusPayload.id,
         oldStatus: createOrderResponse.body.status,
         newStatus: updateOrderStatusPayload.status,
       });
+    });
+  });
+
+  describe('GET /api/orders/search?address=&zipcode=', () => {
+    it('fails to search due to missing input', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/orders/search')
+        .query({
+          address: '',
+          zipcode: '',
+        })
+        .expect(400);
+
+      expect(response.body.message).toEqual([
+        'address should not be empty',
+        'zipcode must be a valid zip code and equal to 6 characters excluding any spaces',
+      ]);
+    });
+
+    it('searches orders by dropoff address', async () => {
+      const address = Math.random().toString(20).substring(2, 12);
+      const zipcode = Math.random().toString(20).substring(2, 8);
+
+      const _createOrderPayload = {
+        ...createOrderPayload,
+
+        dropoff: {
+          ...createOrderPayload.dropoff,
+
+          address,
+          zipcode,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .post('/api/orders')
+        .send(_createOrderPayload)
+        .expect(201);
+
+      const response = await request(app.getHttpServer())
+        .get('/api/orders/search')
+        .query({
+          address: address.slice(0, address.length / 2),
+          zipcode,
+        })
+        .expect(200);
+
+      expect(response.body).toHaveLength(1);
+
+      expect(response.body).toEqual(
+        expect.arrayContaining([expect.objectContaining(_createOrderPayload)]),
+      );
     });
   });
 

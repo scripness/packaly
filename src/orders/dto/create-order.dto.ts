@@ -7,23 +7,23 @@ import {
 
 import { Type } from 'class-transformer';
 
-import { OrderAddressDto } from './order-address.dto';
-import { OrderPackageDto } from './order-package.dto';
+import { OrderAddressDTO } from './order-address.dto';
+import { OrderPackageDTO } from './order-package.dto';
 
-export class CreateOrderDto {
+export class CreateOrderDTO {
   @IsNotEmptyObject()
   @ValidateNested()
-  @Type(() => OrderAddressDto)
-  readonly dropoff: OrderAddressDto;
+  @Type(() => OrderAddressDTO)
+  readonly dropoff: OrderAddressDTO;
 
   @IsNotEmptyObject()
   @ValidateNested()
-  @Type(() => OrderAddressDto)
-  readonly pickup: OrderAddressDto;
+  @Type(() => OrderAddressDTO)
+  readonly pickup: OrderAddressDTO;
 
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
-  @Type(() => OrderPackageDto)
-  readonly packages: OrderPackageDto[];
+  @Type(() => OrderPackageDTO)
+  readonly packages: OrderPackageDTO[];
 }

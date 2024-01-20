@@ -4,7 +4,7 @@ import { OrderStatus } from '../order.schema';
 
 import { IsValidOrderStatus } from '../validators/is-valid-order-status.validator';
 
-export class UpdateOrderStatusDto {
+export class UpdateOrderStatusDTO {
   @IsString()
   @IsNotEmpty()
   @IsMongoId()

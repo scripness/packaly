@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 import { IsZipCode } from '../validators/is-zip-code.validator';
 
-export class OrderAddressDto {
+export class OrderAddressDTO {
   @IsString()
   @IsNotEmpty()
   readonly address: string;

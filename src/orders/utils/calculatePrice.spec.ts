@@ -1,4 +1,4 @@
-import { OrderPackageDto } from '../dto/order-package.dto';
+import { OrderPackageDTO } from '../dto/order-package.dto';
 import { calculatePrice } from './calculatePrice';
 
 describe('calculatePrice()', () => {
@@ -6,7 +6,7 @@ describe('calculatePrice()', () => {
   const EXPECTED_PRICE_FOR_TWO_PACKAGES = EXPECTED_PRICE_FOR_ONE_PACKAGE + 1.5;
 
   it('calculates the order price for one package', async () => {
-    const payload: OrderPackageDto[] = [
+    const payload: OrderPackageDTO[] = [
       {
         height: 50,
         length: 20,
@@ -21,7 +21,7 @@ describe('calculatePrice()', () => {
   });
 
   it('calculates the order price for two packages', async () => {
-    const payload: OrderPackageDto[] = [
+    const payload: OrderPackageDTO[] = [
       {
         height: 50,
         length: 20,

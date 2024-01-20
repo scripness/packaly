@@ -5,23 +5,24 @@ import { Model, Types } from 'mongoose';
 
 import { Order, OrderStatus } from './order.schema';
 
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+import { CreateOrderDTO } from './dto/create-order.dto';
+import { UpdateOrderStatusDTO } from './dto/update-order-status.dto';
 
 import { calculatePrice } from './utils/calculatePrice';
+import { SearchOrdersDTO } from './dto/search-orders.dto';
 
 @Injectable()
 export class OrdersService {
   constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<{
+  async create(createOrderDTO: CreateOrderDTO): Promise<{
     id: Types.ObjectId;
     price: number;
     status: OrderStatus;
   }> {
-    const order = new this.orderModel(createOrderDto);
+    const order = new this.orderModel(createOrderDTO);
 
-    order.set('price', calculatePrice(createOrderDto.packages));
+    order.set('price', calculatePrice(createOrderDTO.packages));
     order.set('status', OrderStatus.CREATED);
 
     const savedOrder = await order.save();
@@ -33,7 +34,7 @@ export class OrdersService {
     };
   }
 
-  async updateStatus({ id, status }: UpdateOrderStatusDto): Promise<{
+  async updateStatus({ id, status }: UpdateOrderStatusDTO): Promise<{
     id: Types.ObjectId;
     oldStatus: OrderStatus;
     newStatus: OrderStatus;
@@ -51,5 +52,17 @@ export class OrdersService {
       oldStatus,
       newStatus: status,
     };
+  }
+
+  async search({ address, zipcode }: SearchOrdersDTO): Promise<Order[]> {
+    return await this.orderModel
+      .find({
+        'dropoff.address': {
+          $regex: address,
+          $options: 'i',
+        },
+        'dropoff.zipcode': zipcode,
+      })
+      .exec();
   }
 }

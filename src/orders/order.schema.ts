@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { HydratedDocument } from 'mongoose';
 
-import { OrderAddressDto } from './dto/order-address.dto';
-import { OrderPackageDto } from './dto/order-package.dto';
+import { OrderAddressDTO } from './dto/order-address.dto';
+import { OrderPackageDTO } from './dto/order-package.dto';
 
 export type OrderDocument = HydratedDocument<Order>;
 
@@ -19,13 +19,13 @@ export enum OrderStatus {
 @Schema()
 export class Order {
   @Prop()
-  dropoff: OrderAddressDto;
+  dropoff: OrderAddressDTO;
 
   @Prop()
-  pickup: OrderAddressDto;
+  pickup: OrderAddressDTO;
 
   @Prop()
-  packages: OrderPackageDto[];
+  packages: OrderPackageDTO[];
 
   @Prop()
   price: number;

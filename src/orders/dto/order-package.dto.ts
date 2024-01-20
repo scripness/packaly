@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
-export class OrderPackageDto {
+export class OrderPackageDTO {
   @IsNumber()
   @IsNotEmpty()
   readonly height: number;
